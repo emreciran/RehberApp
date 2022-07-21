@@ -1,0 +1,182 @@
+﻿@using WebApplication1.Models
+@model List<kisiler>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div>
+    <input type="submit" id="TumKisileriGetir" value="Tüm Rehberi Getir" />
+    <div id="TumKisiler">
+
+    </div>
+</div>
+
+<div>
+    <input type="text" id="Kisi_id" />
+    <br />
+    <input type="submit" id="KisiGetir" value="Kisi Getir" />
+</div>
+<div>
+    <p>Kişi Adı : <strong id="KisiAd"></strong></p>
+    <p>Kişi Soyadı : <strong id="KisiSoyad"></strong></p>
+    <p>Kişi Telefon : <strong id="KisiTelefon"></strong></p>
+</div>
+
+
+    <div>
+        <input type="text" id="kisi_ad" placeholder="ad" />
+        <input type="text" id="kisi_soyad" placeholder="soyad" />
+        <input type="text" id="kisi_tel" placeholder="tel" />
+
+        <input type="submit" id="kisi_ekle" value="Kişi Ekle" />
+    </div>
+
+    <div>
+        <input type="text" id="kisi_id" placeholder="silinecek id" />
+        <input type="submit" id="kisi_sil" value="Kişi Sil" />
+    </div>
+
+
+    <div>
+        <input type="text" id="kisi_id_guncelle" placeholder="güncellenecek id" />
+        <input type="text" id="kisi_ad_guncelle" placeholder="ad" />
+        <input type="text" id="kisi_soyad_guncelle" placeholder="soyad" />
+        <input type="text" id="kisi_tel_guncelle" placeholder="tel" />
+
+        <input type="submit" id="kisi_guncelle" value="Kişi Guncelle" />
+    </div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+    $("#KisiGetir").click(function () {
+        var ID = $("#Kisi_id").val();
+        $.ajax({
+            url: '/RehberAjax/RehberiGetir/' + ID,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data2) {
+                console.log(data2.data);
+                $("#KisiAd").html(data2.data.kisI_AD);
+                $("#KisiSoyad").html(data2.data.kisI_SOYAD);
+                $("#KisiTelefon").html(data2.data.kisI_TELEFON);;
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+    });
+    $("#TumKisileriGetir").click(function () {
+        $.ajax({
+            url: "/RehberAjax/TumRehberiGetir",
+            type: 'GET',
+            dataType: 'json',
+            //contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            success: function (data2) {
+                //console.log(data2.data);
+                //$.each(data2.data, function (i, item) {
+                //    $("#TumKisiler").append(
+                //        "<div style='border-style:ridge;'>Kişi Adı : <strong>" + item.kisI_AD + "</strong><br>" +
+                //        "Kişi Soyadı : <strong>" + item.kisI_SOYAD + "</strong><br>" +
+                //        "Kişi Telefon : <strong>" + item.kisI_TELEFON + "</strong><br>"
+                //    );
+                //});
+                data2.data.forEach(myFunction)
+                function myFunction(item, index, arr) {
+                    $("#TumKisiler").append(
+                        "<div style='border-style:ridge;'>Kişi Adı : <strong>" + item.kisI_AD + "</strong><br>" +
+                        "Kişi Soyadı : <strong>" + item.kisI_SOYAD + "</strong><br>" +
+                        "Kişi Telefon : <strong>" + item.kisI_TELEFON + "</strong><br>"
+                    );
+                }
+            },
+            error: function (hata, ajaxOptions, thrownError) {
+                alert(hata.status);
+                alert(thrownError);
+                console.log(hata.responseText);
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+
+    $("#kisi_ekle").click(function () {
+        var ad = $("#kisi_ad").val();
+        var soyad = $("#kisi_soyad").val();
+        var tel = $("#kisi_tel").val();
+        $.ajax({
+            url: "/RehberAjax/KisiEkle",
+            type: 'POST',
+            data: { Ad: ad, Soyad: soyad, Tel: tel },
+            dataType: 'json',
+            success: function (gelendeger) {
+                console.log(gelendeger);
+                if (gelendeger == "1") {
+                    alert("Ad : " + ad + ", Soyad : " + soyad + ", Telefon :" + tel);
+                } else {
+                    alert("hata");
+                }
+            }
+        })
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+    $("#kisi_sil").click(function () {
+        var id = $("#kisi_id").val();
+        $.ajax({
+            url: "/RehberAjax/KisiSil/" + id,
+            type: 'DELETE',
+            dataType: 'json',
+            success: function (gelendeger) {
+                console.log(gelendeger);
+                if (gelendeger == "1") {
+                    alert("Silindi");
+                } else {
+                    alert("hata");
+                }
+            }
+        })
+    })
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+    $("#kisi_guncelle").click(function () {
+        var id = $("#kisi_id_guncelle").val();
+        var ad = $("#kisi_ad_guncelle").val();
+        var soyad = $("#kisi_soyad_guncelle").val();
+        var tel = $("#kisi_tel_guncelle").val();
+        $.ajax({
+            url: "/RehberAjax/KisiGuncelle/" + id + "/",
+            type: 'PUT',
+            data: { Ad: ad, Soyad: soyad, Tel: tel },
+            dataType: 'json',
+            success: function (gelendeger) {
+                console.log(gelendeger);
+                if (gelendeger == "1") {
+                    alert("güncellendi");
+                } else {
+                    alert("hata");
+                }
+            }
+        })
+    })
+</script>

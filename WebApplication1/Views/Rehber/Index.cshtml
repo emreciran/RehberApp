@@ -1,0 +1,142 @@
+﻿@using WebApplication1.Models
+@model List<kisiler>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<a class="btn btn-info mb-4" href="/Rehber/Ekle/">Kişi Ekle</a>
+
+<div class="overflow-auto">
+    <table id="rehber_table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>FOTOĞRAF</th>
+                <th>AD</th>
+                <th>SOYAD</th>
+                <th>TELEFON NO</th>
+                <th>ŞEHİR</th>
+                <th>SİL</th>
+                <th>GÜNCELLE</th>
+                <th>LİSTELE</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+</div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>
+
+
+@*<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+    $("#rehber_table").dataTable({
+        "columnDefs": [
+            {
+                targets: [0, 5, 6, 7],
+                searchable: false
+            }
+        ]
+    });
+</script>*@
+
+<script>
+    //$('#rehber_table').dataTable({
+    //    "serverSide": "true",
+    //    "ajax": {
+    //        "url": "/Rehber/GetList",
+    //        "type": "POST",
+    //        "datatype": "json"
+    //    },
+    //    "columns": [
+    //        { "data": "ID", "name": "ID" },
+    //        { "data": "AD", "name": "AD" },
+    //        { "data": "SOYAD", "name": "SOYAD" },
+    //        { "data": "TELEFON NO", "name": "TELEFON NO" }
+    //    ],
+    //    "order": [0, "asc"],
+    //    "processing": "true",
+    //    "language": {
+    //        "processing": "Lütfen bekleyin!"
+    //    }
+    //});
+    $(document).ready(function () {
+
+    });
+    $("#rehber_table").DataTable({
+        "processing": true,
+        "language": {
+            "processing": "Lütfen Bekleyin!"
+        },
+        "serverSide": true,
+        "filter": true,
+        "ajax": {
+            "url": "/Rehber/GetList",
+            "type": "POST",
+            "datatype": "json",
+            //"data": function (params) {
+            //    var start = {
+            //        start : params.start
+            //    }
+            //    console.log(start);
+            //    return start;
+            //},
+        },
+        "columnDefs": [{
+            "targets": [0],
+            "searchable": false,
+        }],
+        "columns": [
+            { data: "kisI_ID", name: "kisI_ID", "autoWidth": true },
+            {
+                "render": function (data, type, full, row) { return "<img src='/Images/" + full.kisI_FOTO + "' style='width: 100px; height: 100px' />"; }
+            },
+            { data: "kisI_AD", name: "kisI_AD", "autoWidth": true },
+            { data: "kisI_SOYAD", name: "kisI_SOYAD", "autoWidth": true },
+            { data: "kisI_TELEFON", name: "kisI_TELEFON", "autoWidth": true },
+            { data: "sehir.sehiR_AD", name: "sehir.sehiR_AD", "autoWidth": true },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Rehber/Sil/" + full.kisI_ID + "' class='btn btn-danger' id='btn_sil'>Sil</a>"; }
+            },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Rehber/Guncelle/" + full.kisI_ID + "' class='btn btn-primary'>Güncelle</a>"; }
+            },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Rehber/Listele/" + full.kisI_ID + "' class='btn btn-success'>Listele</a>"; }
+            }
+        ]
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+    $('#btn_sil').click(function () {
+        var id = $('#KISI_ID').val();
+        $.ajax({
+            url: "/Rehber/Sil/" + id,
+            type: "DELETE",
+            dataType: "json",
+            success: function (gelendeger) {
+                console.log(gelendeger);
+                if (gelendeger == "1") {
+                    alert("Silindi");
+                } else {
+                    alert("hata");
+                }
+            }
+        });
+
+    })
+</script>

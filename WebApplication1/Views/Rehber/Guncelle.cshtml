@@ -1,0 +1,137 @@
+﻿@model WebApplication1.Models.kisiler
+@{
+    ViewData["Title"] = "Guncelle";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("RehberGuncelle", "Rehber", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    @Html.HiddenFor(m => m.KISI_ID)
+    <div>
+        @Html.LabelFor(m => m.KISI_AD)
+        @Html.TextBoxFor(m => m.KISI_AD, new { @class = "form-control" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.KISI_SOYAD)
+        @Html.TextBoxFor(m => m.KISI_SOYAD, new { @class = "form-control" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.KISI_TELEFON)
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">+90</span>
+            </div>
+            @Html.TextBoxFor(m => m.KISI_TELEFON, new { @type = "tel", @class = "form-control" })
+        </div>
+        <div>
+            @Html.ValidationMessageFor(m => m.KISI_TELEFON, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+    <div>
+        @Html.LabelFor(m => m.sehir.SEHIR_ID)
+        @Html.DropDownListFor(m => m.sehir.SEHIR_ID, Enumerable.Empty<SelectListItem>(), new { @class = "form-control js-data-example-ajax", @id = "sehir_SEHIR_ID" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.KISI_FOTO)
+        @Html.TextBoxFor(m => m.KISI_FOTO, new { @class = "form-control", @type = "file" })
+        @Html.Label("", (string)ViewBag.error, new { @class = "h6 text-danger" })
+    </div>
+    <div class="d-flex align-items-center">
+        <button class="btn btn-primary mt-4 mr-2" id="btn_guncelle">Güncelle</button>
+        <a href="/Rehber/" class="btn btn-danger mt-4">İptal Et</a>
+    </div>
+}
+
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#KISI_TELEFON").inputmask({ "mask": "(999) 999-9999", "placeholder": "(###) ###-####", "clearMaskOnLostFocus": false });
+    })
+</script>
+
+@*<script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+        $('#btn_guncelle').click(function () {
+            var id = $('#KISI_ID').val();
+            var ad = $("#KISI_AD").val();
+            var soyad = $("#KISI_SOYAD").val();
+            var tel = $("#KISI_TELEFON").val();
+            var sehir = $(“#sehir_SEHIR_ID option : selected”).text();
+            $.ajax({
+                url: "/Rehber/RehberGuncelle/" + id,
+                type: "PUT",
+                data: { id: id, Ad: ad, Soyad: soyad, Telefon: tel, Sehir: sehir },
+                dataType: 'json',
+                success: function (response) {
+                    window.location.href = response.redirectToUrl;
+                }
+            })
+        })
+    </script>*@
+
+<script type="text/javascript">
+    $("#sehir_SEHIR_ID").select2({
+        placeholder: "Şehir Seçiniz",
+        allowClear: true,
+        minimumInputLength: 3,
+        ajax: {
+            url: "/Rehber/GetSelect",
+            contentType: "application/json; charset=utf-8",
+            delay: 250,
+            data: function (params) {
+                var query =
+                {
+                    searchTerm: params.term,
+                    page: 4
+                };
+                return query;
+            },
+            processResults: function (result, params) {
+                params.page = params.page || 1;
+                return {
+                    results: $.map(result.data, function (item) {
+                        return {
+                            id: item.sehiR_ID,
+                            text: item.sehiR_AD,
+                            pagination: {
+                                more: 4
+                            }
+                        };
+                    }),
+                };
+            },
+            cache: true,
+        },
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection,
+    });
+    function formatRepo(repo) {
+        if (repo.loading) {
+            return repo.text;
+        }
+        console.log(repo)
+        var $container = $(
+            "<div class='select2-result-repository clearfix'>" +
+            "<div class='select2-result-repository__title'></div>" +
+            "</div>"
+        );
+
+        $container.find(".select2-result-repository__title").text(repo.text);
+
+        return $container;
+    }
+
+    function formatRepoSelection(repo) {
+        return repo.text;
+    }
+</script>

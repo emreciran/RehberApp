@@ -1,0 +1,24 @@
+﻿@model WebApplication1.Models.sehirler
+@{
+    ViewData["Title"] = "Listele";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@using (Html.BeginForm("Listele", "Sehir", FormMethod.Get))
+{
+    @Html.HiddenFor(m => m.SEHIR_ID)
+    <div>
+        @Html.LabelFor(m => m.SEHIR_AD)
+        @Html.TextBoxFor(m => m.SEHIR_AD, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.SEHIR_PLAKA_KOD)
+        @Html.TextBoxFor(m => m.SEHIR_PLAKA_KOD, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    
+}
+
+
+<a class="btn btn-primary mt-4" href="/Sehir/">Geri Dön</a>

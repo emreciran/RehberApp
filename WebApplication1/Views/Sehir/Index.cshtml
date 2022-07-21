@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<a class="btn btn-info mb-4" href="/Sehir/YeniSehir/">Şehir Ekle</a>
+
+<div class="overflow-auto">
+    <table id="sehir_table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ŞEHİR ADI</th>
+                <th>PLAKA KODU</th>
+                <th>SİL</th>
+                <th>GÜNCELLE</th>
+                <th>LİSTELE</th>
+                <th>DETAY</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+</div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>
+
+
+<script>
+    $(document).ready(function () {
+
+    });
+    $("#sehir_table").DataTable({
+        "processing": true,
+        "language": {
+            "processing": "Lütfen Bekleyin!"
+        },
+        "serverSide": true,
+        "filter": true,
+        "ajax": {
+            "url": "/Sehir/GetList",
+            "type": "POST",
+            "datatype": "json",
+            //"data": function (params) {
+            //    var start = {
+            //        start : params.start
+            //    }
+            //    console.log(start);
+            //    return start;
+            //},
+        },
+        "columnDefs": [{
+            "targets": [0, 3, 4, 5, 6],
+            "searchable": false,
+        }],
+        "columns": [
+            { data: "sehiR_ID", name: "sehiR_ID", "autoWidth": true },
+            { data: "sehiR_AD", name: "sehiR_AD", "autoWidth": true },
+            { data: "sehiR_PLAKA_KOD", name: "sehiR_PLAKA_KOD", "autoWidth": true },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Sehir/Sil/" + full.sehiR_ID + "' class='btn btn-danger' id='btn_sil'>Sil</a>"; }
+            },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Sehir/Guncelle/" + full.sehiR_ID + "' class='btn btn-primary'>Güncelle</a>"; }
+            },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Sehir/Listele/" + full.sehiR_ID + "' class='btn btn-success'>Listele</a>"; }
+            },
+            {
+                "render": function (data, type, full, row) { return "<a href='/Sehir/SehirDetay/" + full.sehiR_ID + "' class='btn btn-secondary'>Detay</a>"; }
+            }
+        ]
+    });
+</script>

@@ -1,0 +1,46 @@
+﻿@using WebApplication1.Models
+@model IEnumerable<kisiler>
+@{
+    ViewData["Title"] = "SehirDetay";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="overflow-auto">
+    @Html.Label("Sehir", (string)ViewBag.dgr, new { @class = "font-weight-bold h3 mb-4" })
+    <table id="sehir_detay_table" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>FOTOĞRAF</th>
+                <th>AD</th>
+                <th>SOYAD</th>
+                <th>TELEFON NO</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var x in Model)
+            {
+                <tr>
+                    <td width="80px" height="80px"><img src="/Images/@x.KISI_FOTO" width="100%" height="100%" /></td>
+                    <td>@x.KISI_AD</td>
+                    <td>@x.KISI_SOYAD</td>
+                    <td>@x.KISI_TELEFON</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<a href="/Sehir" class="btn btn-primary mt-4">Geri Dön</a>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+    });
+    $("#sehir_detay_table").dataTable({
+
+    });
+</script>

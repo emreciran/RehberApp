@@ -1,0 +1,35 @@
+﻿@model WebApplication1.Models.kisiler
+@{
+    ViewData["Title"] = "Listele";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm("Listele", "Rehber", FormMethod.Get))
+{
+    @Html.HiddenFor(m => m.KISI_ID)
+    <div style="width:150px; height: 150px;">
+        <img src="/Images/@Model.KISI_FOTO" width="100%" height="100%" class="rounded-circle" />
+    </div>
+    <div>
+        @Html.LabelFor(m => m.KISI_AD)
+        @Html.TextBoxFor(m => m.KISI_AD, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.KISI_SOYAD)
+        @Html.TextBoxFor(m => m.KISI_SOYAD, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.KISI_TELEFON)
+        @Html.TextBoxFor(m => m.KISI_TELEFON, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    <div>
+        @Html.LabelFor(m => m.sehir.SEHIR_ID)
+        @Html.TextBoxFor(m => m.sehir.SEHIR_AD, new { @class = "form-control", @readonly = "readonly" })
+    </div>
+    @*<div>
+            @Html.LabelFor(m => m.sehir.SEHIR_AD)
+            @Html.TextBox("Sehir", (string)ViewBag.dgr, new { @class = "form-control", @readonly = "readonly" })
+        </div>*@
+}
+<a class="btn btn-primary mt-4" href="/Rehber/">Geri Dön</a>
